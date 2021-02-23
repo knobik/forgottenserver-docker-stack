@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  server:
+    image: otland/forgottenserver
+    restart: unless-stopped
+    depends_on:
+      - database
+    volumes:
+      - ./config.lua:/srv/config.lua
+      - ./data:/srv/data
+    ports:
+      - "7171:7171"
+      - "7172:7172"
+  database:
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=forgottenserver
+      - MYSQL_USER=forgottenserver
+      - MYSQL_PASSWORD=forgottenserver
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    volumes:
+      - ./.database:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
